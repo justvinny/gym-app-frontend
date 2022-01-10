@@ -7,6 +7,8 @@ import TrackProgress from "./pages/TrackProgress";
 import HomePage from "./pages/HomePage";
 
 const App = () => {
+  console.log(process.env.REACT_APP_BACKEND_URL);
+  
   return (
     <div className="App">
       <Router>
