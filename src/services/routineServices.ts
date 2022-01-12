@@ -1,10 +1,10 @@
 import axios from "axios";
 import { Routine } from "../types";
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL;
+const backendUrl = process.env.REACT_APP_BACKEND_URL ?? "";
 
 const getAllRoutines = () => {
-  return axios.get(`${backendUrl}/api/routines`).then((res) => res.data);
+  return axios.get(`${backendUrl}/api/routines`).then((res) => res.data?.routines);
 };
 
 const addRoutine = (routine: Routine) => {
@@ -13,7 +13,7 @@ const addRoutine = (routine: Routine) => {
 
 const updateRoutine = (routine: Routine) => {
   return axios
-    .put(`${backendUrl}/api/routines/${routine._id}`, routine)
+    .put(`${backendUrl}/api/routines/${routine._id ?? routine.id}`, routine)
     .then((res) => res.data);
 };
 

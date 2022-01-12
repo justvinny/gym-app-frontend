@@ -54,8 +54,12 @@ const RecentWorkoutContainer = ({ lastWorkout }: Props) => (
           </TableRow>
         </TableHead>
         <TableBody>
-          {lastWorkout.exercises.map((exercise) => (
-            <TableRow>
+          {lastWorkout.exercises.map((exercise, index) => (
+            <TableRow
+              key={
+                exercise._id ? (exercise._id.toString() as React.Key) : index
+              }
+            >
               <TableCell>{exercise.name}</TableCell>
               <TableCell>
                 {exercise.sets[exercise.sets.length - 1].weight}

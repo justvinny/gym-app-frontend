@@ -15,6 +15,7 @@ export interface User {
 
 export interface Routine {
   _id?: ObjectId;
+  id?: string;
   name: string;
   workouts: Workout[];
 }

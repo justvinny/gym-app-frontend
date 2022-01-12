@@ -37,7 +37,7 @@ const TrackProgress = () => {
                 <>
                   <Link
                     key={(routine._id ? routine._id : index) as React.Key}
-                    to={`${path}/${routine._id}`}
+                    to={`${path}/${routine._id ?? routine.id}`}
                   >
                     <Button
                       sx={{ width: "100%", marginBottom: "10px" }}
@@ -65,7 +65,7 @@ const TrackProgress = () => {
       {routines.map((routine, routineIndex) => (
         <Route
           key={(routine._id ? routine._id : routineIndex) as React.Key}
-          path={`${path}/${routine._id}`}
+          path={`${path}/${routine._id ?? routine.id}`}
         >
           <RoutineDetails
             routine={routine}
