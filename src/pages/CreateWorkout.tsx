@@ -94,7 +94,10 @@ const CreateWorkout = ({ setRoutines, routines }: Props) => {
     };
     routineServices
       .addRoutine(routineObj)
-      .then((data) => setRoutines([...routines, data]))
+      .then((data) => {
+        setRoutines([...routines, data])
+        console.log(routineInput);
+      })
       .then(() => {
         setRoutineInput("");
         setRoutine([

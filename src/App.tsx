@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "./App.css";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -5,10 +6,22 @@ import TopAppBar from "./components/MenuNavigation/TopAppBar";
 import RoutineTemplates from "./pages/RoutineTemplates";
 import TrackProgress from "./pages/TrackProgress";
 import HomePage from "./pages/HomePage";
+import makeServer from "./mock/mockServer";
+import routineServices from "./services/routineServices";
 
 const App = () => {
-  console.log(process.env.REACT_APP_BACKEND_URL);
-  
+  useEffect(() => {
+    routineServices
+    .getAllRoutines()
+    .then(data => {
+      console.log(data);
+    });
+  }, []);
+
+  if (process.env.REACT_APP_CURRENT_ENV === "development") {
+    makeServer();
+  }
+
   return (
     <div className="App">
       <Router>

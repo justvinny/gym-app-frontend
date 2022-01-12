@@ -34,6 +34,7 @@ const ExerciseComponent = ({
 
   const editClick = (set: WorkSet, setIndex: number) => (event: SyntheticEvent) => {
     event.preventDefault();
+    console.log(`Set index is ${setIndex}`);
     setOpen(true);
     setDialogSet({ ...set });
     changeSetIndex(setIndex);
@@ -122,11 +123,11 @@ const ExerciseComponent = ({
       {exercise.sets.length > 1 &&
         exercise.sets.slice(1).map((set, setIndex) => (
           <SetComponent
-            key={setIndex}
+            key={setIndex + 1}
             set={set}
             editClick={editClick}
             deleteSet={deleteSet}
-            setIndex={setIndex}
+            setIndex={setIndex + 1}
           />
         ))}
       <TableRow>
