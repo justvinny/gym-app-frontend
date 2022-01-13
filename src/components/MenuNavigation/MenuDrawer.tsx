@@ -1,6 +1,8 @@
 import { Drawer, List, ListItem, ListItemText, Box } from "@mui/material";
 import { SyntheticEvent } from "react";
 import { useHistory } from "react-router";
+import authService from "../../firebase/authService";
+import { auth } from "../../firebase/config";
 
 interface Props {
   isVisible: boolean,
@@ -31,6 +33,9 @@ const MenuDrawer = ({ isVisible, toggleDrawer } : Props) => {
           </ListItem>
           <ListItem button onClick={btnLink("/routine-templates")}>
             <ListItemText primary="Workout Templates" />
+          </ListItem>
+          <ListItem button onClick={() => authService.logout(auth)}>
+            <ListItemText primary="Logout" />
           </ListItem>
         </List>
       </Box>

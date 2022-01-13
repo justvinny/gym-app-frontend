@@ -34,7 +34,6 @@ const ExerciseComponent = ({
 
   const editClick = (set: WorkSet, setIndex: number) => (event: SyntheticEvent) => {
     event.preventDefault();
-    console.log(`Set index is ${setIndex}`);
     setOpen(true);
     setDialogSet({ ...set });
     changeSetIndex(setIndex);
