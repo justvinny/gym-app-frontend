@@ -1,4 +1,4 @@
-import { Box, Button, ThemeProvider } from "@mui/material";
+import { Box, Button, Skeleton, ThemeProvider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Route, Switch, useRouteMatch, Link } from "react-router-dom";
 import routineServices from "../services/routineServices";
@@ -11,11 +11,15 @@ import PageTitleHeader from "../components/PageTitleHeader";
 const TrackProgress = () => {
   const [routines, setRoutines] = useState([] as Routine[]);
   const { path } = useRouteMatch();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     routineServices
       .getAllRoutines()
-      .then((data) => setRoutines(data))
+      .then((data) => {
+        setLoading(false);
+        setRoutines(data);
+      })
       .catch((e) => console.error(e));
   }, []);
 
@@ -33,22 +37,31 @@ const TrackProgress = () => {
           >
             <PageTitleHeader title={"Track Progress"} />
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-              {routines.map((routine, index) => (
-                <>
-                  <Link
-                    key={(routine._id ? routine._id : index) as React.Key}
-                    to={`${path}/${routine._id ?? routine.id}`}
-                  >
-                    <Button
-                      sx={{ width: "100%", marginBottom: "10px" }}
-                      variant="outlined"
-                      color="primary"
+              {loading ? (
+                <Skeleton
+                  variant="rectangular"
+                  width="100%"
+                  height={30}
+                  sx={{ marginBottom: "10px", borderRadius: "4px" }}
+                />
+              ) : (
+                routines.map((routine, index) => (
+                  <>
+                    <Link
+                      key={(routine._id ? routine._id : index) as React.Key}
+                      to={`${path}/${routine._id ?? routine.id}`}
                     >
-                      {routine.name}
-                    </Button>
-                  </Link>
-                </>
-              ))}
+                      <Button
+                        sx={{ width: "100%", marginBottom: "10px" }}
+                        variant="outlined"
+                        color="primary"
+                      >
+                        {routine.name}
+                      </Button>
+                    </Link>
+                  </>
+                ))
+              )}
               <Link to={`${path}/create-workout`}>
                 <Button
                   sx={{ width: "100%", marginBottom: "10px" }}
