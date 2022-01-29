@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage";
 import { auth } from "./firebase/config";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { UserContext } from "./context/UserContext";
+import Loading from "./components/Loading";
 
 const App = () => {
   if (process.env.REACT_APP_CURRENT_ENV === "development") {
@@ -18,15 +19,22 @@ const App = () => {
   }
 
   const [authUser, setAuthUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  onAuthStateChanged(auth, (currentUser) => {
-    setAuthUser(currentUser);
-  });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setAuthUser(currentUser);
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <div className="App">
-      {authUser === null ? (
-        <LoginPage />
+      {loading ? (
+        <Loading />
+      ) : authUser === null ? (
+        <LoginPage setLoading={setLoading} />
       ) : (
         <UserContext.Provider value={authUser}>
           <Box sx={{ marginTop: "100px" }}>
