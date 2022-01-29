@@ -35,7 +35,7 @@ const RoutineDetails = ({
       .then(() => {
         setOpenSnackBar(true);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(`Save changes to routine failed: ${error}`));
   };
 
   const handleClose = (event: React.SyntheticEvent, reason?: string) => {

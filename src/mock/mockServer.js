@@ -6,7 +6,7 @@ const makeServer = () =>
       routine: Model,
     },
     serializers: {
-      application: RestSerializer
+      application: RestSerializer,
     },
     seeds(server) {
       server.create("routine", {
@@ -238,7 +238,9 @@ const makeServer = () =>
         let id = request.params.id;
         return schema.routines.find(id).update(request.requestBody);
       });
+
+      this.passthrough("https://identitytoolkit.googleapis.com/**");
     },
   });
 
-  export default makeServer;
+export default makeServer;
