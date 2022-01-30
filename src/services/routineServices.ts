@@ -1,20 +1,26 @@
 import axios from "axios";
 import { Routine } from "../types";
+import { backendUrl } from "./servicesConstants";
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL ?? "";
-
-const getAllRoutines = () => {
-  return axios.get(`${backendUrl}/api/routines`).then((res) => res.data?.routines);
+const getAllRoutines = (id: string) => {
+  return axios.get(`${backendUrl}/api/users/${id}/routines`).then((res) => {
+    return res.data;
+  });
 };
 
-const addRoutine = (routine: Routine) => {
-  return axios.post(`${backendUrl}/api/routines`, routine).then((res) => res.data);
-};
-
-const updateRoutine = (routine: Routine) => {
+const addRoutine = (id: string, routine: Routine) => {
   return axios
-    .put(`${backendUrl}/api/routines/${routine._id ?? routine.id}`, routine)
-    .then((res) => res.data);
+    .post(`${backendUrl}/api/users/${id}/routines`, routine)
+    .then((res) => res.data?.user?.routines);
+};
+
+const updateRoutine = (id: string, routine: Routine) => {
+  return axios
+    .put(
+      `${backendUrl}/api/users/${id}/routines/${routine._id ?? routine.id}`,
+      routine
+    )
+    .then((res) => res.data?.user?.routines);
 };
 
 const routineServices = { addRoutine, getAllRoutines, updateRoutine };

@@ -1,6 +1,7 @@
 import { TextField, Button, Box, ThemeProvider, Divider } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import PageTitleHeader from "../components/PageTitleHeader";
+import { UserContext } from "../context/UserContext";
 import routineServices from "../services/routineServices";
 import customTheme from "../themes/customTheme";
 import { Routine } from "../types";
@@ -33,6 +34,7 @@ const CreateWorkout = ({ setRoutines, routines }: Props) => {
       ],
     },
   ]);
+  const authUser = useContext(UserContext);
 
   // Input change event
   const handleChange =
@@ -93,9 +95,9 @@ const CreateWorkout = ({ setRoutines, routines }: Props) => {
       workouts: routine,
     };
     routineServices
-      .addRoutine(routineObj)
+      .addRoutine(authUser?.uid as string, routineObj)
       .then((data) => {
-        setRoutines([...routines, data])
+        setRoutines(data)
       })
       .then(() => {
         setRoutineInput("");

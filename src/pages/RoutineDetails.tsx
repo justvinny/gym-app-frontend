@@ -9,9 +9,10 @@ import {
 } from "@mui/material";
 import { Close, ArrowUpward } from "@material-ui/icons";
 import routineServices from "../services/routineServices";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import customTheme from "../themes/customTheme";
 import { Routine } from "../types";
+import { UserContext } from "../context/UserContext";
 
 interface Props {
   routine: Routine;
@@ -27,11 +28,12 @@ const RoutineDetails = ({
   setRoutines,
 }: Props) => {
   const [openSnackBar, setOpenSnackBar] = useState(false);
+  const authUser = useContext(UserContext);
 
   const saveToDB = (event: React.SyntheticEvent) => {
     event.preventDefault();
     routineServices
-      .updateRoutine(routine)
+      .updateRoutine(authUser?.uid as string, routine)
       .then(() => {
         setOpenSnackBar(true);
       })
