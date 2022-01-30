@@ -1,3 +1,8 @@
+# Gym App Frotend
+Frontend SPA for the Gym Tracker App which allows you to record your progress in the gym.
+
+[Old repository link](https://github.com/justvinny/full-stack-gym-tracker-app) where the frontend was extracted from.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
