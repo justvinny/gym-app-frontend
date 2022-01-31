@@ -24,11 +24,16 @@ const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      userService.getUser(currentUser?.uid as string).then((fetchedUser) => {
-        setAuthUser(fetchedUser);
-        setLoading(false);
-      });
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser !== null) {
+        await userService
+          .getUser(currentUser?.uid as string)
+          .then((fetchedUser) => {
+            setAuthUser(fetchedUser);
+          });
+      }
+
+      setLoading(false);
     });
     return unsubscribe;
   }, []);
@@ -40,7 +45,7 @@ const App = () => {
       ) : authUser === null ? (
         <LoginPage setLoading={setLoading} />
       ) : (
-        <UserContext.Provider value={{authUser, setAuthUser}}>
+        <UserContext.Provider value={{ authUser, setAuthUser }}>
           <Box sx={{ marginTop: "100px" }}>
             <Router>
               <TopAppBar />

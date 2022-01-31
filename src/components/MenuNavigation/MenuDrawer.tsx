@@ -1,19 +1,27 @@
 import { Drawer, List, ListItem, ListItemText, Box } from "@mui/material";
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, useContext } from "react";
 import { useHistory } from "react-router";
+import { UserContext } from "../../context/UserContext";
 import authService from "../../firebase/authService";
 import { auth } from "../../firebase/config";
+import { UserContextType } from "../../types";
 
 interface Props {
-  isVisible: boolean,
-  toggleDrawer(event: SyntheticEvent): void
+  isVisible: boolean;
+  toggleDrawer(event: SyntheticEvent): void;
 }
 
-const MenuDrawer = ({ isVisible, toggleDrawer } : Props) => {
+const MenuDrawer = ({ isVisible, toggleDrawer }: Props) => {
   const history = useHistory();
-
   const btnLink = (path: string) => () => {
     history.push(path);
+  };
+
+  const { setAuthUser } = useContext(UserContext) as UserContextType;
+  const logout = () => {
+    authService.logout(auth);
+    setAuthUser(null);
+    history.push("/");
   };
 
   return (
@@ -34,7 +42,7 @@ const MenuDrawer = ({ isVisible, toggleDrawer } : Props) => {
           <ListItem button onClick={btnLink("/routine-templates")}>
             <ListItemText primary="Workout Templates" />
           </ListItem>
-          <ListItem button onClick={() => authService.logout(auth)}>
+          <ListItem button onClick={logout}>
             <ListItemText primary="Logout" />
           </ListItem>
         </List>
