@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Dialog, Box, TextField, Button } from "@mui/material";
 import React from "react";
 import { handleInputChange } from "../../../utils";
+import { User } from "../../../types";
+import userService from "../../../services/userService";
 
 interface Props {
   open: boolean;
@@ -14,6 +16,8 @@ interface Props {
   setAge: React.Dispatch<React.SetStateAction<number>>;
   setHeight: React.Dispatch<React.SetStateAction<number>>;
   setAboutMe: React.Dispatch<React.SetStateAction<string>>;
+  authUser: User;
+  setAuthUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const EditInfoDialog = ({
@@ -27,6 +31,8 @@ const EditInfoDialog = ({
   setAge,
   setHeight,
   setAboutMe,
+  authUser,
+  setAuthUser,
 }: Props) => {
   const [nameInput, setNameInput] = useState(name);
   const [ageInput, setAgeInput] = useState(age);
@@ -34,11 +40,23 @@ const EditInfoDialog = ({
   const [aboutMeInput, setAboutMeInput] = useState(aboutMe);
 
   const save = () => {
-    setName(nameInput);
-    setAge(ageInput);
-    setHeight(heightInput);
-    setAboutMe(aboutMeInput);
-    setOpen(false);
+    const authUserClone = { ...authUser };
+    authUserClone.name = nameInput;
+    authUserClone.age = ageInput;
+    authUserClone.height = heightInput;
+    authUserClone.aboutMe = aboutMeInput;
+
+    userService
+      .updateUser(authUserClone)
+      .then((user) => {
+        setAuthUser(user);
+        setName(nameInput);
+        setAge(ageInput);
+        setHeight(heightInput);
+        setAboutMe(aboutMeInput);
+        setOpen(false);
+      })
+      .catch((error) => alert(`Failed to save: ${error}`));
   };
 
   return (

@@ -321,6 +321,11 @@ const makeServer = () =>
         return schema.users.find(userId).update(user);
       });
 
+      this.put("/api/users/:id", (schema, request) => {
+        const id = request.params.id;
+        return schema.users.find(id).update(JSON.parse(request.requestBody));
+      });
+
       this.passthrough("https://identitytoolkit.googleapis.com/**");
     },
   });

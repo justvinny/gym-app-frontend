@@ -16,7 +16,7 @@ import { UserContext } from "../context/UserContext";
 
 const HomePage = () => {
   // User object
-  const { authUser } = useContext(UserContext) as UserContextType;
+  const { authUser, setAuthUser } = useContext(UserContext) as UserContextType;
 
   // Basic Info
   const [name, setName] = useState<string>(authUser?.name ?? "");
@@ -96,6 +96,8 @@ const HomePage = () => {
         setAge={setAge}
         setHeight={setHeight}
         setAboutMe={setAboutMe}
+        authUser={authUser}
+        setAuthUser={setAuthUser}
       />
       <EditWeightDialog
         open={openEditWeight}
@@ -106,6 +108,8 @@ const HomePage = () => {
         setStartWeight={setStartWeight}
         setCurrentWeight={setCurrentWeight}
         setGoalWeight={setGoalWeight}
+        authUser={authUser}
+        setAuthUser={setAuthUser}
       />
       <EditFeaturedDialog
         open={openEditFeatured}
@@ -113,6 +117,8 @@ const HomePage = () => {
         featuredExercises={featuredExercises}
         setFeaturedExercises={setFeaturedExercises}
         routines={authUser?.routines as Routine[]}
+        authUser={authUser}
+        setAuthUser={setAuthUser}
       />
     </>
   );

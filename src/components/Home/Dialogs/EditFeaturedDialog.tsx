@@ -13,9 +13,13 @@ import {
   FeaturedExercises,
   Routine,
   SelectType,
+  User,
 } from "../../../types";
 import FeaturedExercisesTable from "./FeaturedExercisesTable";
 import FeaturedExercisesSelectors from "./FeaturedExercisesSelectors";
+// TODO: save() line 187
+// eslint-disable-next-line
+import userService from "../../../services/userService";
 
 interface Props {
   open: boolean;
@@ -23,6 +27,8 @@ interface Props {
   featuredExercises: FeaturedExercises;
   setFeaturedExercises: React.Dispatch<React.SetStateAction<FeaturedExercises>>;
   routines: Routine[];
+  authUser: User;
+  setAuthUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const EditFeaturedDialog = ({
@@ -31,6 +37,8 @@ const EditFeaturedDialog = ({
   featuredExercises,
   setFeaturedExercises,
   routines,
+  authUser,
+  setAuthUser,
 }: Props) => {
   const [routineSelected, setRoutineSelected] = useState("");
   const [workoutSelected, setWorkoutSelected] = useState("");
@@ -175,6 +183,21 @@ const EditFeaturedDialog = ({
     setFeaturedExercises(clone);
   };
 
+  // TODO: Does not work properly. Might need to rewrite this component as it looks pretty spaghetti to me. :/
+  const save = () => {
+    const authUserClone = { ...authUser };
+    authUserClone.featuredExercises = featuredExercises;
+    console.log(authUserClone.featuredExercises);
+    setOpen(false);
+    // userService
+    //   .updateUser(authUserClone)
+    //   .then((user) => {
+    //     setAuthUser(user);
+    //     setOpen(false);
+    //   })
+    //   .catch((error) => alert(`Failed to save: ${error}`));
+  };
+
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <Box
@@ -205,8 +228,8 @@ const EditFeaturedDialog = ({
         <Button variant="contained" onClick={addExercise}>
           Add
         </Button>
-        <Button variant="outlined" onClick={() => setOpen(false)}>
-          Close
+        <Button variant="outlined" onClick={save}>
+          Save and Close
         </Button>
       </Box>
     </Dialog>
