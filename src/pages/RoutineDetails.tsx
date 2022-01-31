@@ -11,7 +11,7 @@ import { Close, ArrowUpward } from "@material-ui/icons";
 import routineServices from "../services/routineServices";
 import React, { useContext, useState } from "react";
 import customTheme from "../themes/customTheme";
-import { Routine } from "../types";
+import { Routine, UserContextType } from "../types";
 import { UserContext } from "../context/UserContext";
 
 interface Props {
@@ -28,16 +28,18 @@ const RoutineDetails = ({
   setRoutines,
 }: Props) => {
   const [openSnackBar, setOpenSnackBar] = useState(false);
-  const authUser = useContext(UserContext);
+  const { authUser } = useContext(UserContext) as UserContextType;
 
   const saveToDB = (event: React.SyntheticEvent) => {
     event.preventDefault();
     routineServices
-      .updateRoutine(authUser?.uid as string, routine)
+      .updateRoutine(authUser?.id as string, routine)
       .then(() => {
         setOpenSnackBar(true);
       })
-      .catch((error) => console.log(`Save changes to routine failed: ${error}`));
+      .catch((error) =>
+        console.log(`Save changes to routine failed: ${error}`)
+      );
   };
 
   const handleClose = (event: React.SyntheticEvent, reason?: string) => {

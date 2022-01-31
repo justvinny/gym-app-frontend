@@ -5,7 +5,7 @@ import routineServices from "../services/routineServices";
 import CreateWorkout from "./CreateWorkout";
 import RoutineDetails from "./RoutineDetails";
 import customTheme from "../themes/customTheme";
-import { Routine } from "../types";
+import { Routine, UserContextType } from "../types";
 import PageTitleHeader from "../components/PageTitleHeader";
 import { UserContext } from "../context/UserContext";
 
@@ -13,11 +13,11 @@ const TrackProgress = () => {
   const [routines, setRoutines] = useState([] as Routine[]);
   const { path } = useRouteMatch();
   const [loading, setLoading] = useState<boolean>(true);
-  const authUser = useContext(UserContext);
+  const { authUser } = useContext(UserContext) as UserContextType;
 
   useEffect(() => {
     routineServices
-      .getAllRoutines(authUser?.uid as string)
+      .getAllRoutines(authUser?.id as string)
       .then((data) => {
         setLoading(false);
         setRoutines(data);

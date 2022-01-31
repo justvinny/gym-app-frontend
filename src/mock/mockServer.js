@@ -21,16 +21,45 @@ const makeServer = () =>
         goalWeight: 90,
         featuredExercises: [
           {
-            routineId: "61dce4a20145b70f847f217b",
-            workoutId: "61dce4a20145b70f847f200b",
-            exerciseId: "61dce4a20149b70f847f200a",
+            name: "Bench Press",
+            sets: [
+              {
+                _id: "51dce4a20145b70f847f200a",
+                weight: 100,
+                reps: 5,
+              },
+              {
+                _id: "51dce4a20145b70f847f201a",
+                weight: 100,
+                reps: 5,
+              },
+              {
+                _id: "51dce4a20145b70f847f202a",
+                weight: 100,
+                reps: 5,
+              },
+            ],
           },
           {
-            routineId: "61dce4a20145b70f847f217b",
-            workoutId: "81dce6a20145b70f847f202b",
-            exerciseId: "81dce4a50145b70f847f200a",
+            name: "Deadlift",
+            sets: [
+              {
+                _id: "71dce4a20145b70f847f200a",
+                weight: 200,
+                reps: 5,
+              },
+              {
+                _id: "71dce4a20145b70f847f201a",
+                weight: 200,
+                reps: 5,
+              },
+              {
+                _id: "71dce4a20145b70f847f202a",
+                weight: 220,
+                reps: 3,
+              },
+            ],
           },
-          {},
         ],
         routines: [
           {
@@ -252,6 +281,16 @@ const makeServer = () =>
     },
     routes() {
       this.namespace = process.env.REACT_APP_BACKEND_URL ?? "";
+
+      this.get("/api/users", (schema) => {
+        return schema.users.all();
+      });
+
+      this.get("/api/users/:id", (schema, request) => {
+        const id = request.params.id;
+        return schema.users.find(id);
+      });
+
       this.get("/api/users/:id/routines", (schema, request) => {
         const id = request.params.id;
         const user = schema.users.find(id);
@@ -273,7 +312,9 @@ const makeServer = () =>
         const userId = request.params.userid;
         const routineId = request.params.routineid;
         const user = schema.users.find(userId).attrs;
-        const routines = user.routines.filter(routine => routine.id !== routineId);
+        const routines = user.routines.filter(
+          (routine) => routine.id !== routineId
+        );
         const updatedRoutine = JSON.parse(request.requestBody);
         const newRoutines = [routines, updatedRoutine];
         user.routines = newRoutines;
