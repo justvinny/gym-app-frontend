@@ -1,27 +1,29 @@
 import { Box, Button, Skeleton, ThemeProvider } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Route, Switch, useRouteMatch, Link } from "react-router-dom";
 import routineServices from "../services/routineServices";
 import CreateWorkout from "./CreateWorkout";
 import RoutineDetails from "./RoutineDetails";
 import customTheme from "../themes/customTheme";
-import { Routine } from "../types";
+import { Routine, UserContextType } from "../types";
 import PageTitleHeader from "../components/PageTitleHeader";
+import { UserContext } from "../context/UserContext";
 
 const TrackProgress = () => {
   const [routines, setRoutines] = useState([] as Routine[]);
   const { path } = useRouteMatch();
   const [loading, setLoading] = useState<boolean>(true);
+  const { authUser } = useContext(UserContext) as UserContextType;
 
   useEffect(() => {
     routineServices
-      .getAllRoutines()
+      .getAllRoutines(authUser?.id as string)
       .then((data) => {
         setLoading(false);
         setRoutines(data);
       })
       .catch((e) => console.error(e));
-  }, []);
+  }, [authUser]);
 
   return (
     <Switch>
@@ -48,7 +50,7 @@ const TrackProgress = () => {
                 routines.map((routine, index) => (
                   <>
                     <Link
-                      key={(routine._id ? routine._id : index) as React.Key}
+                      key={(routine._id ?? routine.id ?? index) as React.Key}
                       to={`${path}/${routine._id ?? routine.id}`}
                     >
                       <Button

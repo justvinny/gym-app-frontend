@@ -9,9 +9,11 @@ import HomePage from "./pages/HomePage";
 import makeServer from "./mock/mockServer";
 import LoginPage from "./pages/LoginPage";
 import { auth } from "./firebase/config";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { UserContext } from "./context/UserContext";
 import Loading from "./components/Loading";
+import userService from "./services/userService";
+import { User } from "./types";
 
 const App = () => {
   if (process.env.REACT_APP_CURRENT_ENV === "development") {
@@ -22,8 +24,15 @@ const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setAuthUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser !== null) {
+        await userService
+          .getUser(currentUser?.uid as string)
+          .then((fetchedUser) => {
+            setAuthUser(fetchedUser);
+          });
+      }
+
       setLoading(false);
     });
     return unsubscribe;
@@ -36,7 +45,7 @@ const App = () => {
       ) : authUser === null ? (
         <LoginPage setLoading={setLoading} />
       ) : (
-        <UserContext.Provider value={authUser}>
+        <UserContext.Provider value={{ authUser, setAuthUser }}>
           <Box sx={{ marginTop: "100px" }}>
             <Router>
               <TopAppBar />

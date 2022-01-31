@@ -1,4 +1,4 @@
-import { User } from "firebase/auth";
 import { createContext } from "react";
+import { UserContextType } from "../types";
 
-export const UserContext = createContext<User | null>(null);
+export const UserContext = createContext<UserContextType | null>(null);

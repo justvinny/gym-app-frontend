@@ -1,7 +1,14 @@
 import { ObjectId } from "mongodb";
+import React from "react";
+
+export interface UserContextType {
+  authUser: User;
+  setAuthUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
 
 export interface User {
   _id?: ObjectId;
+  id?: string,
   name: string;
   age: number;
   height: number;
