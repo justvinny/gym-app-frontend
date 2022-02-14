@@ -23,7 +23,9 @@ const DashboardGauge = ({ weight, label, reps }: Props) => {
       <>
         <Box sx={{ fontSize: 40, fontWeight: "bold" }}>{weight}</Box>
         <Box sx={{ fontSize: 14, fontWeight: "bold" }}>{reps} reps</Box>
-        <Box sx={{ fontSize: 14, fontWeight: "bold" }}>{label}</Box>
+        <Box sx={{ fontSize: 14, fontWeight: "bold", textAlign: "center" }}>
+          {label}
+        </Box>
       </>
     );
   };
