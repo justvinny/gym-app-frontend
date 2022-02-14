@@ -10,22 +10,19 @@ import React from "react";
 import {
   Exercise,
   Workout,
-  FeaturedExercises,
   Routine,
   SelectType,
   User,
 } from "../../../types";
 import FeaturedExercisesTable from "./FeaturedExercisesTable";
 import FeaturedExercisesSelectors from "./FeaturedExercisesSelectors";
-// TODO: save() line 187
-// eslint-disable-next-line
 import userService from "../../../services/userService";
 
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  featuredExercises: FeaturedExercises;
-  setFeaturedExercises: React.Dispatch<React.SetStateAction<FeaturedExercises>>;
+  featuredExercises: Exercise[];
+  setFeaturedExercises: React.Dispatch<React.SetStateAction<Exercise[]>>;
   routines: Routine[];
   authUser: User;
   setAuthUser: React.Dispatch<React.SetStateAction<User | null>>;
@@ -151,51 +148,30 @@ const EditFeaturedDialog = ({
       alert("Featured exercises are full. Please delete one first.");
       return;
     } else {
-      const index = getEmptyIndex();
-      const clone = cloneFeaturedExercises();
-      clone[index] = currentExercise;
+      const clone = [...featuredExercises, currentExercise] as Exercise[];
       setFeaturedExercises(clone);
     }
   };
 
-  const isFeaturedExercisesFull = () =>
-    featuredExercises[0] && featuredExercises[1] && featuredExercises[2];
-
-  const getEmptyIndex = () =>
-    featuredExercises.findIndex((exercise) => exercise === undefined);
-
-  const cloneFeaturedExercises = (): FeaturedExercises => {
-    const _featuredExercises: FeaturedExercises = [
-      undefined,
-      undefined,
-      undefined,
-    ];
-    _featuredExercises[0] = featuredExercises[0];
-    _featuredExercises[1] = featuredExercises[1];
-    _featuredExercises[2] = featuredExercises[2];
-    return _featuredExercises;
-  };
+  const isFeaturedExercisesFull = () => featuredExercises?.length >= 3;
 
   const deleteExercise = (index: number) => (event: SyntheticEvent) => {
     event.preventDefault();
-    const clone = cloneFeaturedExercises();
-    clone[index] = undefined;
+    const clone = featuredExercises.filter((_, _index) => index !== _index);
     setFeaturedExercises(clone);
   };
 
-  // TODO: Does not work properly. Might need to rewrite this component as it looks pretty spaghetti to me. :/
   const save = () => {
     const authUserClone = { ...authUser };
-    authUserClone.featuredExercises = featuredExercises;
-    console.log(authUserClone.featuredExercises);
-    setOpen(false);
-    // userService
-    //   .updateUser(authUserClone)
-    //   .then((user) => {
-    //     setAuthUser(user);
-    //     setOpen(false);
-    //   })
-    //   .catch((error) => alert(`Failed to save: ${error}`));
+    authUserClone.featuredExercises = [...featuredExercises];
+    setAuthUser(authUserClone);
+    userService
+      .updateUser(authUserClone)
+      .then((user) => {
+        setAuthUser(user);
+        setOpen(false);
+      })
+      .catch((error) => alert(`Failed to save: ${error}`));
   };
 
   return (

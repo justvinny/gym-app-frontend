@@ -5,8 +5,8 @@ import WeightContainer from "../components/Home/WeightContainer";
 import ExercisesContainer from "../components/Home/ExercisesContainer";
 import RecentWorkoutContainer from "../components/Home/RecentWorkoutContainer";
 import {
+  Exercise,
   Routine,
-  FeaturedExercises,
   UserContextType,
 } from "../types";
 import EditInfoDialog from "../components/Home/Dialogs/EditInfoDialog";
@@ -37,7 +37,7 @@ const HomePage = () => {
 
   // Best exercises
   // TODO: Might need to rethink schema for featured exercises when backend is built.
-  const [featuredExercises, setFeaturedExercises] = useState<FeaturedExercises>(authUser.featuredExercises as FeaturedExercises);
+  const [featuredExercises, setFeaturedExercises] = useState<Exercise[]>(authUser.featuredExercises as Exercise[]);
 
   // Latest workout
   // TODO: Need a proper method to get latest workout after backend is built.

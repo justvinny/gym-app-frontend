@@ -9,10 +9,10 @@ import {
   IconButton,
 } from "@mui/material";
 import { Delete } from "@material-ui/icons";
-import { FeaturedExercises } from "../../../types";
+import { Exercise } from "../../../types";
 
 interface Props {
-  featuredExercises: FeaturedExercises;
+  featuredExercises: Exercise[];
   deleteExercise(index: number): (event: SyntheticEvent) => void;
 }
 

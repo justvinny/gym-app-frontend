@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 import DashboardGauge from "./DashboardGauge";
 import ContainerHeading from "./ContainerHeading";
-import { FeaturedExercises } from "../../types";
+import { Exercise } from "../../types";
 import React from "react";
 
 interface Props {
-  featuredExercises: FeaturedExercises;
+  featuredExercises: Exercise[];
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
